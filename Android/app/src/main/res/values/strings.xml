@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Scratch Games</string>
+    <string name="app_name_up">SCRATCH GAMES</string>
+    <string name="action_settings">Settings</string>
+    <string name="ok">OK</string>
+    <string name="add">Add</string>
+    <string name="preparing">Preparing...</string>
+    <string name="cancel">Cancel</string>
+    <string name="game_title">title</string>
+    <string name="game_author">author</string>
+    <string name="no_network">No networks. Please try again later</string>
+    <string name="start">Start</string>
+    <string name="best">Best Picks</string>
+    <string name="showroom">Shared Games</string>
+    <string name="add_id">Scratch ID (e.g. 142508032)</string>
+    <string name="add_name">Game title</string>
+    <string name="add_user">Maker</string>
+    <string name="add_you_game_message">Add information of your Scratch Game.</string>
+    <string name="add_you_game_title">Add new game</string>
+    <string name="added_your_game">Successfully added your game</string>
+    <string name="emailTitle">[Scratch Games] Help me!</string>
+    <string name="emailDesc">Hi! Developer.</string>
+    <string name="contact">Contact</string>
+    <string name="about">About</string>
+    <string name="guide_showroom">You can share your own Scratch games with everybody in the world. Add right now with + button.</string>
+    <string name="more_detail"><u>SEE DETAIL</u></string>
+    <string name="how_to_add_new_game">How to add new game</string>
+    <string name="developer">Developer</string>
+</resources>

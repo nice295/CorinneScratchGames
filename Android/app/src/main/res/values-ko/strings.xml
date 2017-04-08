@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">스크래치 게임</string>
+    <string name="app_name_up">SCRATCH GAMES</string>
+    <string name="action_settings">설정</string>
+    <string name="ok">OK</string>
+    <string name="add">추가</string>
+    <string name="preparing">준비중...</string>
+    <string name="cancel">취소</string>
+    <string name="game_title">제목</string>
+    <string name="game_author">만든이</string>
+    <string name="no_network">접속할 네트워크가 없습니다 나중에 다시 시도하세요.</string>
+    <string name="start">시작</string>
+    <string name="best">베스트 추천</string>
+    <string name="showroom">공유된 게임</string>
+    <string name="add_id">스크래치 ID (예, 142508032)</string>
+    <string name="add_name">게임 제목</string>
+    <string name="add_user">만든이</string>
+    <string name="add_you_game_message">당신이 만든 스크래치 게임 정보를 넣어보세요.</string>
+    <string name="add_you_game_title">새로운 게임 추가</string>
+    <string name="added_your_game">성공적으로 당신의 게임을 추가했습니다.</string>
+    <string name="emailTitle">[스크래치 게임] 도와주세요!</string>
+    <string name="emailDesc">안녕하세요 개발자님.</string>
+    <string name="contact">연락하기</string>
+    <string name="about">앱 정보</string>
+    <string name="guide_showroom">당신이 직접 만든 스크래치 게임을 추가해서 전세계 사람들과 공유할 수 있습니다. 바로 + 버턴을 눌러서 추가하세요.</string>
+    <string name="more_detail"><u>상세한 설명 보기</u></string>
+    <string name="how_to_add_new_game">새로운 게임 추가 방법</string>
+    <string name="developer">개발자</string>
+</resources>
