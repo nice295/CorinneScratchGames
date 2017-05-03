@@ -56,6 +56,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.nice295.scratchgames.R;
 import com.nice295.scratchgames.ShowWebView;
 import com.nice295.scratchgames.model.BestItem;
+import com.nice295.scratchgames.model.ShowRoomExtItem;
 import com.nice295.scratchgames.model.ShowRoomItem;
 
 import java.net.HttpURLConnection;
@@ -72,8 +73,7 @@ public class ShowRoomFragment extends Fragment {
     private ListView mLvMyItems;
     private ListViewAdapter mAdapter = null;
     private ArrayList<ShowRoomItem> mMyItemArray;
-
-    private HashMap<String, String> mItems;
+    private HashMap<String, ShowRoomExtItem> mMyItemExtHash;
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private DatabaseReference mDatabase;
@@ -86,6 +86,7 @@ public class ShowRoomFragment extends Fragment {
 
         //mMyItemArray = new ArrayList<ShowRoomItem>();
         mMyItemArray = Paper.book().read("showroom", new ArrayList<ShowRoomItem>());
+        mMyItemExtHash = Paper.book().read("showroom-ext", new HashMap<String, ShowRoomExtItem>());
 
         mLvMyItems = (ListView) ll.findViewById(R.id.lvShowroom);
         mAdapter = new ListViewAdapter(getActivity(), R.layout.layout_item_list_item, mMyItemArray);
@@ -97,6 +98,35 @@ public class ShowRoomFragment extends Fragment {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        Query showroomExtQuery = mDatabase.child("showroom-ext");
+        showroomExtQuery.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        mMyItemExtHash.clear();
+
+                        if (dataSnapshot.getChildrenCount() != 0) {
+                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                ShowRoomExtItem item = postSnapshot.getValue(ShowRoomExtItem.class);
+                                Log.d(TAG, "postSnapshot.getKey(): " + postSnapshot.getKey());
+                                Log.d(TAG, "viewCount: " + item.getViewCount());
+
+                                mMyItemExtHash.put(postSnapshot.getKey(), item);
+                            }
+
+                            mAdapter.notifyDataSetChanged();
+
+                            Paper.book().write("showroom-ext", mMyItemExtHash);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "showroom-ext:onCancelled", databaseError.toException());
+                    }
+                }
+        );
 
         Query myTopPostsQuery = mDatabase.child("showroom");
         myTopPostsQuery.addValueEventListener(
@@ -142,6 +172,16 @@ public class ShowRoomFragment extends Fragment {
                     intent.putExtra("id", item.getId());
                     intent.putExtra("user", item.getUser());
                     intent.putExtra("name", item.getName());
+
+                    // Add view count
+                    ShowRoomExtItem showRoomExtItem = mMyItemExtHash.get(item.getId());
+                    if (showRoomExtItem != null) {
+                        increaseViewCount(item.getId(), showRoomExtItem.getViewCount());
+                    }
+                    else {
+                        addNewMyItemExt(item.getId());
+                    }
+
                 }
                 startActivity(intent);
             }
@@ -170,6 +210,7 @@ public class ShowRoomFragment extends Fragment {
             public ImageView ivPic;
             public TextView tvName;
             public TextView tvUser;
+            public TextView tvViewCount;
         }
 
         @Override
@@ -186,6 +227,7 @@ public class ShowRoomFragment extends Fragment {
                 viewHolder.ivPic = (ImageView) convertView.findViewById(R.id.ivPic);
                 viewHolder.tvName = (TextView) convertView.findViewById(R.id.tvName);
                 viewHolder.tvUser = (TextView) convertView.findViewById(R.id.tvUser);
+                viewHolder.tvViewCount = (TextView) convertView.findViewById(R.id.tvViewCount);
 
                 convertView.setTag(viewHolder);
             } else {
@@ -202,6 +244,14 @@ public class ShowRoomFragment extends Fragment {
 
                 viewHolder.tvName.setText(item.getName());
                 viewHolder.tvUser.setText(item.getUser());
+
+                ShowRoomExtItem showRoomExtItem = mMyItemExtHash.get(item.getId());
+                if (showRoomExtItem != null) {
+                    viewHolder.tvViewCount.setText(String.valueOf(showRoomExtItem.getViewCount()));
+                }
+                else {
+                    addNewMyItemExt(item.getId());
+                }
             }
             return convertView;
         }
@@ -311,5 +361,14 @@ public class ShowRoomFragment extends Fragment {
     private void addNewMyItem(String id, String name, String user, String imageUrl) {
         ShowRoomItem item = new ShowRoomItem(id, name, user, imageUrl);
         mDatabase.child("showroom").child(id).setValue(item);
+    }
+
+    private void addNewMyItemExt(String id) {
+        ShowRoomExtItem item = new ShowRoomExtItem(id, 0, "deviceId", "reserved1", "reserved2");
+        mDatabase.child("showroom-ext").child(id).setValue(item);
+    }
+
+    private void increaseViewCount(String id, int viewCount) {
+        mDatabase.child("showroom-ext").child(id).child("viewCount").setValue(viewCount + 1);
     }
 }

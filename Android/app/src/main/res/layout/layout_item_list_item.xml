@@ -23,23 +23,44 @@
         android:id="@+id/tvUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Horace Lee"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:layout_below="@+id/tvName"
         android:layout_alignLeft="@+id/tvName"
         android:layout_alignStart="@+id/tvName"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        tools:text="Horace Lee" />
 
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Horace Lee"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="12dp"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/ivPic"
-        android:layout_toEndOf="@+id/ivPic" />
+        android:layout_toEndOf="@+id/ivPic"
+        tools:text="Horace Lee" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_visibility"
+        android:id="@+id/ivView"
+        android:layout_toLeftOf="@+id/tvViewCount"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="8dp"
+        android:paddingRight="4dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvViewCount"
+        tools:text="+999"
+        android:layout_alignParentRight="true"
+        android:textSize="8dp"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="8dp"
+        android:paddingRight="8dp" />
 
 </RelativeLayout>
