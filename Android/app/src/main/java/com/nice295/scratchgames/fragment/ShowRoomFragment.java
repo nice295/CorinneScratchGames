@@ -178,9 +178,6 @@ public class ShowRoomFragment extends Fragment {
                     if (showRoomExtItem != null) {
                         increaseViewCount(item.getId(), showRoomExtItem.getViewCount());
                     }
-                    else {
-                        addNewMyItemExt(item.getId());
-                    }
 
                 }
                 startActivity(intent);
@@ -208,6 +205,7 @@ public class ShowRoomFragment extends Fragment {
 
         public class ViewHolder {
             public ImageView ivPic;
+            public ImageView ivView;
             public TextView tvName;
             public TextView tvUser;
             public TextView tvViewCount;
@@ -228,6 +226,7 @@ public class ShowRoomFragment extends Fragment {
                 viewHolder.tvName = (TextView) convertView.findViewById(R.id.tvName);
                 viewHolder.tvUser = (TextView) convertView.findViewById(R.id.tvUser);
                 viewHolder.tvViewCount = (TextView) convertView.findViewById(R.id.tvViewCount);
+                viewHolder.ivView = (ImageView) convertView.findViewById(R.id.ivView);
 
                 convertView.setTag(viewHolder);
             } else {
@@ -248,9 +247,12 @@ public class ShowRoomFragment extends Fragment {
                 ShowRoomExtItem showRoomExtItem = mMyItemExtHash.get(item.getId());
                 if (showRoomExtItem != null) {
                     viewHolder.tvViewCount.setText(String.valueOf(showRoomExtItem.getViewCount()));
-                }
-                else {
-                    addNewMyItemExt(item.getId());
+
+                    viewHolder.ivView.setVisibility(View.VISIBLE);
+                    viewHolder.tvViewCount.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.ivView.setVisibility(View.GONE);
+                    viewHolder.tvViewCount.setVisibility(View.GONE);
                 }
             }
             return convertView;
@@ -293,11 +295,12 @@ public class ShowRoomFragment extends Fragment {
                 if (editId.getText() != null && editName.getText() != null && editUser.getText() != null) {
 
 
-
                     addNewMyItem(editId.getText().toString(),
                             editName.getText().toString(),
                             editUser.getText().toString(),
                             "https://cdn2.scratch.mit.edu/get_image/project/" + editId.getText() + "_282x210.png");
+
+                    addNewMyItemExt(editId.getText().toString());
 
                     editId.clearFocus();
                     editId.setText("");
@@ -330,6 +333,34 @@ public class ShowRoomFragment extends Fragment {
         ((AlertDialog) b).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
         // Now set the textchange listener for edittext
+        editName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Check if edittext is empty
+                if (editId.getText().length() != 9 || TextUtils.getTrimmedLength(s) < 3) {
+                    // Disable ok button
+                    ((AlertDialog) b).getButton(
+                            AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                } else {
+                    // Something into edit text. Enable the button.
+                    ((AlertDialog) b).getButton(
+                            AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
+
+            }
+        });
+
+        // Now set the textchange listener for edittext
         editId.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
@@ -344,7 +375,7 @@ public class ShowRoomFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 // Check if edittext is empty
-                if (TextUtils.getTrimmedLength(s) != 9) {
+                if (editName.getText().length() < 3 || TextUtils.getTrimmedLength(s) != 9) {
                     // Disable ok button
                     ((AlertDialog) b).getButton(
                             AlertDialog.BUTTON_POSITIVE).setEnabled(false);
