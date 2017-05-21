@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Scratch Игры</string>
+    <string name="app_name_up">SCRATCH ИГРЫ</string>
+    <string name="action_settings">настройки</string>
+    <string name="ok">OK</string>
+    <string name="add">Добавить</string>
+    <string name="preparing">Подготовка...</string>
+    <string name="cancel">Отмена</string>
+    <string name="game_title">заглавие</string>
+    <string name="game_author">автор</string>
+    <string name="no_network">Нет сетей. Пожалуйста, повторите попытку позже</string>
+    <string name="start">Начало</string>
+    <string name="best">Лучшие предложения</string>
+    <string name="showroom">Общие игры</string>
+    <string name="add_id">Scratch ID (e.g. 142508032)</string>
+    <string name="add_name">Название игры</string>
+    <string name="add_user">производитель</string>
+    <string name="add_you_game_message">Добавить информацию о вашей игре Scratch. Все в мире будут наслаждаться.</string>
+    <string name="add_you_game_title">Добавить новую игру</string>
+    <string name="added_your_game">Ваша игра успешно добавлена</string>
+    <string name="emailTitle">[Scratch игр] Помогите мне!</string>
+    <string name="emailDesc">Здравствуй! Разработчик.</string>
+    <string name="contact">Свяжитесь с нами</string>
+    <string name="about">около</string>
+    <string name="guide_showroom">Вы можете поделиться своими собственными Scratch-играми со всеми в мире. Добавьте прямо сейчас с помощью кнопки +.</string>
+    <string name="more_detail"><u>СМ ДЕТАЛИ</u></string>
+    <string name="how_to_add_new_game">Как добавить новую игру</string>
+    <string name="developer">разработчик</string>
+    <string name="delete_game">Удалить эту игру?</string>
+    <string name="delete">Удалить</string>
+</resources>

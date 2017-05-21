@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1064135960695",
+    "firebase_url": "https://scratchgames-dev.firebaseio.com",
+    "project_id": "scratchgames-dev",
+    "storage_bucket": "scratchgames-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064135960695:android:ca0d84f5f9830cf7",
+        "android_client_info": {
+          "package_name": "com.nice295.scratchgames"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1064135960695-19a33qvqothdri4lh252cqs7g0g9gs2m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYktnVROX_ehuCfdhu1J7lfgzjivoB0cc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

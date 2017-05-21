@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "307395719767",
+    "firebase_url": "https://scratchgames-86531.firebaseio.com",
+    "project_id": "scratchgames-86531",
+    "storage_bucket": "scratchgames-86531.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307395719767:android:ca0d84f5f9830cf7",
+        "android_client_info": {
+          "package_name": "com.nice295.scratchgames"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "307395719767-vnpea4mr9l67baj4ct10upj3r5sdlpka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nice295.scratchgames",
+            "certificate_hash": "3C0D00B1313B54DD2B07A41355F71875E2A74073"
+          }
+        },
+        {
+          "client_id": "307395719767-9eekkra63psag8luke3jtmnq1jtnmgr3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv7H6NAowMTrbdHROqkU7O5JwQiXn0LsE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "307395719767-9eekkra63psag8luke3jtmnq1jtnmgr3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

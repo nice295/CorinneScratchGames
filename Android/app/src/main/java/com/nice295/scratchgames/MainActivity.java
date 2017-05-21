@@ -59,7 +59,7 @@ import io.paperdb.Paper;
  */
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
-
+    private TabLayout mTabLayout;
     private FloatingActionsMenu mFloatingActionsMenu;
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -81,8 +81,8 @@ public class MainActivity extends BaseActivity {
             setupViewPager(viewPager);
         }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        mTabLayout.setupWithViewPager(viewPager);
 
         /*
         // Change font for tab titles
@@ -105,6 +105,7 @@ public class MainActivity extends BaseActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
+        /* v1.5: Do not use anymore
         mAuth.signInAnonymously()
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -121,6 +122,7 @@ public class MainActivity extends BaseActivity {
                         }
                     }
                 });
+        */
 
         Paper.init(this);
     }
@@ -194,5 +196,9 @@ public class MainActivity extends BaseActivity {
                 .subject(getString(R.string.emailTitle))
                 .body(getString(R.string.emailDesc))
                 .start();
+    }
+
+    private void updateTabTitle(int position, String title) {
+        mTabLayout.getTabAt(position).setText(title);
     }
 }

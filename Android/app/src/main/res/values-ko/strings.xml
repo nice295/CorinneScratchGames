@@ -26,4 +26,6 @@
     <string name="more_detail"><u>상세한 설명 보기</u></string>
     <string name="how_to_add_new_game">새로운 게임 추가 방법</string>
     <string name="developer">개발자</string>
+    <string name="delete_game">이 게임을 삭제할까요</string>
+    <string name="delete">삭제</string>
 </resources>

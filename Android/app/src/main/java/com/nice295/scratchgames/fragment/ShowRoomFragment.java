@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -67,6 +68,8 @@ import java.util.LinkedList;
 
 import io.paperdb.Paper;
 
+import static com.nice295.scratchgames.R.id.editId;
+
 public class ShowRoomFragment extends Fragment {
     private static final String TAG = "ShowRoomFragment";
 
@@ -77,6 +80,8 @@ public class ShowRoomFragment extends Fragment {
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private DatabaseReference mDatabase;
+
+    private String mAndroidId = null;
 
     @Nullable
     @Override
@@ -184,6 +189,27 @@ public class ShowRoomFragment extends Fragment {
             }
         });
 
+        mAndroidId = Settings.Secure.getString(getContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        Log.d(TAG, "ANDROID_ID: " + mAndroidId);
+
+        mLvMyItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id) {
+
+                if (mAndroidId != null && mAndroidId.equals("3aebba2c123546da")) {
+                    if (position != 0) {
+
+                        position -= mLvMyItems.getHeaderViewsCount();
+                        ShowRoomItem item = mAdapter.getItem().get(position);
+                        showDeleteDialog(item.getId());
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        });
+
         AddFloatingActionButton fab = (AddFloatingActionButton) ll.findViewById(R.id.fab_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,8 +218,10 @@ public class ShowRoomFragment extends Fragment {
             }
         });
 
+
         return ll;
     }
+
 
     private class ListViewAdapter extends ArrayAdapter<ShowRoomItem> {
         private ArrayList<ShowRoomItem> items;
@@ -275,6 +303,27 @@ public class ShowRoomFragment extends Fragment {
             showAddDialog();
         }
         return true;
+    }
+
+    private void showDeleteDialog(final String deleteId) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
+        dialogBuilder.setMessage(getString(R.string.delete_game));
+        dialogBuilder.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mDatabase.child("showroom").child(deleteId).removeValue();
+                mDatabase.child("showroom-ext").child(deleteId).removeValue();
+            }
+        });
+
+        dialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int whichButton) {
+                dialogInterface.cancel();
+            }
+        });
+
+        final AlertDialog b = dialogBuilder.create();
+        b.show();
     }
 
     private void showAddDialog() {
