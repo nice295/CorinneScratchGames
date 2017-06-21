@@ -28,4 +28,17 @@
     <string name="developer">разработчик</string>
     <string name="delete_game">Удалить эту игру?</string>
     <string name="delete">Удалить</string>
+    <string name="about_app">О приложении</string>
+    <string name="upgrade">Обновить</string>
+    <string name="Tap_upgrade">Tap button to upgrade the new version.</string>
+    <string name="about_this_app">У меня есть двое детей, которые любят делать скретч-игры. Это приложение началось для них, чтобы наслаждаться играми на мобильных устройствах. Как и они, я надеюсь получить удовольствие от ваших и чужих Scratch игр в этом приложении.</string>
+    <string name="version">Версия: %s</string>
+    <string name="current_is_newest">Текущая версия является самой новой.</string>
+    <string name="community">сообщество</string>
+    <string name="removefrom_mygame">Удалить эту игру из Избранного?</string>
+    <string name="remove">Удалить</string>
+    <string name="mygames">My Games</string>
+    <string name="nofavorites" >Нажмите кнопку сердца в играх. Они будут размещены здесь.</string>
+    <string name="tooltip1">1. Нажмите кнопку + ниже, чтобы добавить игру.</string>
+    <string name="tooltip2">2. Нажмите, чтобы удалить добавленные вами игры.</string>
 </resources>

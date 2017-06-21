@@ -3,8 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.nice295.scratchgames.MainActivity">
     <item
-        android:id="@+id/action_contact"
+        android:id="@+id/action_about"
         android:orderInCategory="200"
+        android:title="@string/about_app"
+        app:showAsAction="never" />
+    <!--
+    <item
+        android:id="@+id/action_community"
+        android:orderInCategory="250"
+        android:title="@string/community"
+        app:showAsAction="never" />
+        -->
+    <item
+        android:id="@+id/action_contact"
+        android:orderInCategory="300"
         android:title="@string/contact"
         app:showAsAction="never" />
+
 </menu>

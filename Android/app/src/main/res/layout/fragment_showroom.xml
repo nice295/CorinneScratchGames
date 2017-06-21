@@ -1,19 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:background="@color/background">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llGuides"
+        android:background="@color/white"
+        android:elevation="14dp">
+
+        <TextView
+            android:text="@string/tooltip1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+
+        <TextView
+            android:text="@string/tooltip2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/lvShowroom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/layout_item_list_item" />
+        tools:listitem="@layout/layout_item_list_item"
+        android:layout_below="@+id/llGuides"
+        />
 
     <com.getbase.floatingactionbutton.AddFloatingActionButton
         android:id="@+id/fab_add"
@@ -23,13 +53,13 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        fab:fab_addButtonColorNormal="@color/colorAccent"
-        fab:fab_addButtonColorPressed="@color/colorAccentDark"
-        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_colorNormal="@color/colorAccent"
+        fab:fab_colorPressed="@color/colorAccentDark"
         fab:fab_labelStyle="@style/menu_labels_style"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true">
 
     </com.getbase.floatingactionbutton.AddFloatingActionButton>
+
 </RelativeLayout>
 

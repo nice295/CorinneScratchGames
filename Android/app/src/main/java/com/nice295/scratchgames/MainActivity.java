@@ -17,7 +17,9 @@
 package com.nice295.scratchgames;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,12 +45,21 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.nice295.scratchgames.fragment.BestFragment;
+import com.nice295.scratchgames.fragment.MygamesFragment;
 import com.nice295.scratchgames.fragment.ShowRoomFragment;
+import com.nice295.scratchgames.model.ShowRoomExtItem;
+import com.nice295.scratchgames.model.ShowRoomItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.cketti.mailto.EmailIntentBuilder;
@@ -67,6 +78,8 @@ public class MainActivity extends BaseActivity {
     private FirebaseAuth mAuth;
 
     private static final int RC_OCR_CAPTURE = 9003;
+
+    private LinkedList<String> mListLikes;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,6 +138,25 @@ public class MainActivity extends BaseActivity {
         */
 
         Paper.init(this);
+
+        Query showroomExtQuery = mDatabase.child("version");
+        showroomExtQuery.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String version = dataSnapshot.getValue(String.class);
+                        Paper.book().write("version", version);
+                        Log.w(TAG, "version: " + version);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "version:onCancelled", databaseError.toException());
+                    }
+                }
+        );
+
+        mListLikes = Paper.book().read("likes", new LinkedList<String>());
     }
 
     @Override
@@ -151,6 +183,20 @@ public class MainActivity extends BaseActivity {
             sendEmail();
             return true;
         }
+        else if (id == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+
+            return true;
+        }
+        /*
+        else if (id == R.id.action_community) {
+            Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+            String facebookUrl = getFacebookPageURL(this);
+            facebookIntent.setData(Uri.parse(facebookUrl));
+            startActivity(facebookIntent);
+        }
+        */
         return super.onOptionsItemSelected(item);
     }
 
@@ -158,7 +204,9 @@ public class MainActivity extends BaseActivity {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new BestFragment(), getString(R.string.best));
         adapter.addFragment(new ShowRoomFragment(), getString(R.string.showroom));
+        adapter.addFragment(new MygamesFragment(), getString(R.string.mygames));
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(0);
     }
 
     static class Adapter extends FragmentPagerAdapter {
@@ -200,5 +248,22 @@ public class MainActivity extends BaseActivity {
 
     private void updateTabTitle(int position, String title) {
         mTabLayout.getTabAt(position).setText(title);
+    }
+
+    public String getFacebookPageURL(Context context) {
+        String FACEBOOK_URL = "https://www.facebook.com/groups/1348800195234630/";
+        String FACEBOOK_PAGE_ID = "1348800195234630";
+
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+            } else { //older versions of fb app
+                return "fb://group/" + FACEBOOK_PAGE_ID;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return FACEBOOK_URL; //normal web url
+        }
     }
 }

@@ -8,10 +8,17 @@
     <color name="colorAccentLight">#FFB652</color>
     -->
 
+    <!--
     <color name="colorAccent">#25aff4</color>
     <color name="colorAccentDark">#0191DA</color>
     <color name="colorPrimary">#F9A83A</color>
     <color name="colorPrimaryDark">#B77C1A</color>
+    -->
+
+    <color name="colorAccent">#f9a83a</color>
+    <color name="colorAccentDark">#B77C1A</color>
+    <color name="colorPrimary">#25aff4</color>
+    <color name="colorPrimaryDark">#0191DA</color>
 
     <color name="black_semi_transparent">#B2000000</color>
     <color name="background">#e5e5e5</color>

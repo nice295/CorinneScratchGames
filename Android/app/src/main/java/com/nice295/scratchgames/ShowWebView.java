@@ -6,20 +6,35 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.LinkedList;
+
+import io.paperdb.Paper;
 
 
 public class ShowWebView extends BaseActivity {
 
     private static final String TAG = "ShowWebView";
+
+    private boolean mLike = false;
+
+    private LinkedList<String> mListLikes;
+    private String mId;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private boolean haveNetworkConnection() {
         boolean haveConnectedWifi = false;
@@ -51,7 +66,7 @@ public class ShowWebView extends BaseActivity {
         setContentView(R.layout.show_web_view);
 
         Intent intent = getIntent();
-        String id = intent.getExtras().getString("id");
+        mId = intent.getExtras().getString("id");
         String user = intent.getExtras().getString("user");
         String name = intent.getExtras().getString("name");
 
@@ -64,12 +79,69 @@ public class ShowWebView extends BaseActivity {
         //Get webview
         webView = (WebView) findViewById(R.id.webView1);
         if (haveNetworkConnection()) {
-            startWebView("https://nice295.github.io/scratchgames/app.html?id="+id+"&turbo=false&full-screen=true");
+            startWebView("https://nice295.github.io/scratchgames/app.html?id="+mId+"&turbo=false&full-screen=true");
         } else {
             Toast.makeText(this, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
             finish(); //khlee
             webView.loadUrl("file:///android_asset/error.html");
         }
+
+        mListLikes = Paper.book().read("likes", new LinkedList<String>());
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_webview, menu);
+
+        if ( mListLikes.contains(mId) ) {
+            menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_favorite_white_24dp));
+            mLike = true;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.like) {
+            if(mLike){
+                //change your view and sort it by Alphabet
+                //item.setIcon(icon1)
+                item.setIcon(getResources().getDrawable(R.drawable.ic_favorite_border_white_24dp));
+                mLike = false;
+
+                mListLikes.remove(mId);
+            }else{
+                //change your view and sort it by Date of Birth
+                //item.setIcon(icon2)
+                item.setIcon(getResources().getDrawable(R.drawable.ic_favorite_white_24dp));
+                mLike = true;
+
+                mListLikes.add(mId);
+
+                String androidId = Settings.Secure.getString(this.getContentResolver(),
+                        Settings.Secure.ANDROID_ID);
+
+                Bundle params = new Bundle();
+                params.putString("id", mId);
+                params.putString("userId", androidId);
+                mFirebaseAnalytics.logEvent("likes", params);
+            }
+            Paper.book().write("likes", mListLikes);
+            Log.d(TAG, "Like count: " + mListLikes.size());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void startWebView(String url) {

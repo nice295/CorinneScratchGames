@@ -19,18 +19,15 @@ package com.nice295.scratchgames.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,8 +36,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -48,7 +45,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,23 +54,19 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nice295.scratchgames.R;
 import com.nice295.scratchgames.ShowWebView;
-import com.nice295.scratchgames.model.BestItem;
 import com.nice295.scratchgames.model.ShowRoomExtItem;
 import com.nice295.scratchgames.model.ShowRoomItem;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import io.paperdb.Paper;
 
+public class MygamesFragment extends Fragment {
+    private static final String TAG = "MygamesFragment";
 
-public class ShowRoomFragment extends Fragment {
-    private static final String TAG = "ShowRoomFragment";
-
-    private View mVTooltip;
+    private TextView mTvNoGames;
     private ListView mLvMyItems;
     private ListViewAdapter mAdapter = null;
     private ArrayList<ShowRoomItem> mMyItemArray;
@@ -84,19 +76,25 @@ public class ShowRoomFragment extends Fragment {
     private DatabaseReference mDatabase;
 
     private String mAndroidId = null;
+
     private LinkedList<String> mListLikes;
+
+    private DataSnapshot mLastdataSnapshot = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout ll = (RelativeLayout) inflater.inflate(
-                R.layout.fragment_showroom, container, false);
+        FrameLayout ll = (FrameLayout) inflater.inflate(
+                R.layout.fragment_mygames, container, false);
 
         //mMyItemArray = new ArrayList<ShowRoomItem>();
-        mMyItemArray = Paper.book().read("showroom", new ArrayList<ShowRoomItem>());
-        mMyItemExtHash = Paper.book().read("showroom-ext", new HashMap<String, ShowRoomExtItem>());
+        mMyItemArray = Paper.book().read("_showroom", new ArrayList<ShowRoomItem>());
+        mMyItemExtHash = Paper.book().read("_showroom-ext", new HashMap<String, ShowRoomExtItem>());
         mListLikes = Paper.book().read("likes", new LinkedList<String>());
 
+        Log.d(TAG, "mMyItemArray count: " + mMyItemArray.size());
+
+        mTvNoGames = (TextView) ll.findViewById(R.id.tvNoGames);
         mLvMyItems = (ListView) ll.findViewById(R.id.lvShowroom);
         mAdapter = new ListViewAdapter(getActivity(), R.layout.layout_item_list_item, mMyItemArray);
         mLvMyItems.setAdapter(mAdapter);
@@ -108,6 +106,7 @@ public class ShowRoomFragment extends Fragment {
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         Query showroomExtQuery = mDatabase.child("showroom-ext");
@@ -128,8 +127,9 @@ public class ShowRoomFragment extends Fragment {
 
                             mAdapter.notifyDataSetChanged();
 
-                            Paper.book().write("showroom-ext", mMyItemExtHash);
+                            Paper.book().write("_showroom-ext", mMyItemExtHash);
                         }
+
                     }
 
                     @Override
@@ -150,13 +150,16 @@ public class ShowRoomFragment extends Fragment {
                         if (dataSnapshot.getChildrenCount() != 0) {
                             for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                                 ShowRoomItem item = postSnapshot.getValue(ShowRoomItem.class);
-                                mMyItemArray.add(item);
+                                if (mListLikes.contains(item.getId())) {
+                                    mMyItemArray.add(item);
+                                }
                             }
 
                             mAdapter.notifyDataSetChanged();
 
-                            Paper.book().write("showroom", mMyItemArray);
+                            Paper.book().write("_showroom", mMyItemArray);
                         }
+                        mLastdataSnapshot = dataSnapshot;
                     }
 
                     @Override
@@ -170,28 +173,6 @@ public class ShowRoomFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), ShowWebView.class);
-
-                /* 170620
-                if (i == 0) {
-                    intent.putExtra("id", "147132284");
-                    intent.putExtra("user", getString(R.string.developer));
-                    intent.putExtra("name", getString(R.string.how_to_add_new_game));
-
-                } else {
-                    i -= mLvMyItems.getHeaderViewsCount();
-                    ShowRoomItem item = mAdapter.getItem().get(i);
-
-                    intent.putExtra("id", item.getId());
-                    intent.putExtra("user", item.getUser());
-                    intent.putExtra("name", item.getName());
-
-                    // Add view count
-                    ShowRoomExtItem showRoomExtItem = mMyItemExtHash.get(item.getId());
-                    if (showRoomExtItem != null) {
-                        increaseViewCount(item.getId(), showRoomExtItem.getViewCount());
-                    }
-
-                }*/
 
                 ShowRoomItem item = mAdapter.getItem().get(i);
 
@@ -213,6 +194,7 @@ public class ShowRoomFragment extends Fragment {
                 Settings.Secure.ANDROID_ID);
         Log.d(TAG, "ANDROID_ID: " + mAndroidId);
 
+        /* Later
         mLvMyItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id) {
 
@@ -221,16 +203,8 @@ public class ShowRoomFragment extends Fragment {
 
                 if (mAndroidId != null &&
                         ( mAndroidId.equals("3aebba2c123546da") || mAndroidId.equals(showRoomExtItem.getReserved1()) )) {
-                    /* 170620
-                    if (position != 0) {
 
-                        position -= mLvMyItems.getHeaderViewsCount();
-                        ShowRoomItem item = mAdapter.getItem().get(position);
-                        showDeleteDialog(item.getId());
-                        return true;
-                    }
-                    */
-                    showDeleteDialog(item.getId());
+                    showRemoveDialog(item.getId());
 
                     return true;
                 }
@@ -238,34 +212,6 @@ public class ShowRoomFragment extends Fragment {
                 return false;
             }
         });
-
-        AddFloatingActionButton fab = (AddFloatingActionButton) ll.findViewById(R.id.fab_add);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAddDialog();
-            }
-        });
-
-        /*
-        Boolean tooltipDelete = Paper.book().read("tooltipDelete", false);
-
-        if (tooltipDelete) {
-            ViewTooltip
-                    .on(mVTooltip)
-                    .autoHide(false, 1000)
-                    .color(Color.BLACK)
-                    .clickToHide(true)
-                    .position(ViewTooltip.Position.BOTTOM)
-                    .text(getString(R.string.tooltipdelete))
-                    .onHide(new ViewTooltip.ListenerHide() {
-                        @Override
-                        public void onHide(View view) {
-                            Paper.book().write("tooltipDelete", true);
-                        }
-                    })
-                    .show();
-        }
         */
 
         return ll;
@@ -313,7 +259,7 @@ public class ShowRoomFragment extends Fragment {
             ShowRoomItem item = items.get(position);
             Log.d(TAG, "Name: " + item.getName());
             Log.d(TAG, "URL: " + item.getImageUrl());
-            if (item != null) {
+            if (mListLikes.contains(item.getId()) && item != null) {
                 Glide.with(getActivity())
                         .load(item.getImageUrl())
                         .into(viewHolder.ivPic);
@@ -331,12 +277,48 @@ public class ShowRoomFragment extends Fragment {
                     viewHolder.ivView.setVisibility(View.GONE);
                     viewHolder.tvViewCount.setVisibility(View.GONE);
                 }
+
+                return convertView;
             }
-            return convertView;
+            else {
+                return null;
+            }
         }
 
         public ArrayList<ShowRoomItem> getItem() {
             return this.items;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        setUserVisibleHint(true);
+        super.onStart();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        mListLikes = Paper.book().read("likes", new LinkedList<String>());
+
+        if (isVisibleToUser) {
+            Log.d(TAG, "onResume: Like count: " + mListLikes.size());
+
+            mAdapter.clear();
+
+            if (mLastdataSnapshot != null && mLastdataSnapshot.getChildrenCount() != 0) {
+                for (DataSnapshot postSnapshot : mLastdataSnapshot.getChildren()) {
+                    ShowRoomItem item = postSnapshot.getValue(ShowRoomItem.class);
+                    if (mListLikes.contains(item.getId())) {
+                        mMyItemArray.add(item);
+                    }
+                }
+            }
+
+            mAdapter.notifyDataSetChanged();
+        }
+        else {
         }
     }
 
@@ -354,16 +336,13 @@ public class ShowRoomFragment extends Fragment {
         return true;
     }
 
-    private void showDeleteDialog(final String deleteId) {
+    private void showRemoveDialog(final String removeId) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
-        dialogBuilder.setMessage(getString(R.string.delete_game));
-        dialogBuilder.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
+        dialogBuilder.setMessage(getString(R.string.removefrom_mygame));
+        dialogBuilder.setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mDatabase.child("showroom").child(deleteId).removeValue();
-                mDatabase.child("showroom-ext").child(deleteId).removeValue();
-
-                mListLikes.remove(deleteId);
+                mListLikes.remove(removeId);
                 Paper.book().write("likes", mListLikes);
             }
         });

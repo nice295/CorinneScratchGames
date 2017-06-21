@@ -41,6 +41,16 @@
                 android:value="com.nice295.scratchgames.MainActivity" />
         </activity>
 
+        <activity
+            android:name="com.nice295.scratchgames.AboutActivity"
+            android:parentActivityName="com.nice295.scratchgames.MainActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/MainAppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nice295.scratchgames.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

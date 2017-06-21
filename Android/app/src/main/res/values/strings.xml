@@ -9,7 +9,7 @@
     <string name="game_title">title</string>
     <string name="game_author">author</string>
     <string name="no_network">No networks. Please try again later</string>
-    <string name="start">Start</string>
+    <string name="start">Start</string>p
     <string name="best">Best Picks</string>
     <string name="showroom">Shared Games</string>
     <string name="add_id">Scratch ID (e.g. 142508032)</string>
@@ -28,4 +28,17 @@
     <string name="developer">Developer</string>
     <string name="delete_game">Delete this game?</string>
     <string name="delete">Delete</string>
+    <string name="about_app">About App</string>
+    <string name="upgrade">Upgrade</string>
+    <string name="Tap_upgrade">Tap the button to upgrade the new version.</string>
+    <string name="about_this_app">I have two kids to love to make Scratch games. This application has started for them to enjoy their games in mobile. Like them I hope to enjoy with your and other\'s Scratch games in this application.</string>
+    <string name="version">Version: %s</string>
+    <string name="current_is_newest">Current version is the newest.</string>
+    <string name="community">Community</string>
+    <string name="removefrom_mygame">Remove this game from Favorites?</string>
+    <string name="remove">remove</string>
+    <string name="mygames">Favorites</string>
+    <string name="nofavorites" >Tap the heart button in the games. They will be placed here.</string>
+    <string name="tooltip1">1. Tap + button below to add your game.</string>
+    <string name="tooltip2">2. Long tap to delete the games you added.</string>
 </resources>
