@@ -56,11 +56,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.nice295.scratchgames.Event.EventShowroom;
 import com.nice295.scratchgames.R;
 import com.nice295.scratchgames.ShowWebView;
 import com.nice295.scratchgames.model.BestItem;
 import com.nice295.scratchgames.model.ShowRoomExtItem;
 import com.nice295.scratchgames.model.ShowRoomItem;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -126,7 +129,9 @@ public class ShowRoomFragment extends Fragment {
                                 mMyItemExtHash.put(postSnapshot.getKey(), item);
                             }
 
+
                             mAdapter.notifyDataSetChanged();
+                            EventBus.getDefault().post( new EventShowroom(mAdapter.getCount()));
 
                             Paper.book().write("showroom-ext", mMyItemExtHash);
                         }
@@ -154,6 +159,7 @@ public class ShowRoomFragment extends Fragment {
                             }
 
                             mAdapter.notifyDataSetChanged();
+                            EventBus.getDefault().post( new EventShowroom(mAdapter.getCount()));
 
                             Paper.book().write("showroom", mMyItemArray);
                         }

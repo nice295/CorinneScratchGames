@@ -92,6 +92,16 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="64dp" />
+
+            <Button
+                android:text="@string/rate_this_app"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnRate"
+                tools:text="Rate the application"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_gravity="center"
+                android:paddingTop="8dp" />
         </LinearLayout>
 
     </LinearLayout>

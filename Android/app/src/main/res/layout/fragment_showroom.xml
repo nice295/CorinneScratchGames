@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/llGuides"
         android:background="@color/white"
-        android:elevation="14dp">
+        android:elevation="4dp">
 
         <TextView
             android:text="@string/tooltip1"

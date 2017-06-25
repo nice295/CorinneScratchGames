@@ -36,6 +36,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -51,11 +52,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.nice295.scratchgames.Event.EventMygames;
+import com.nice295.scratchgames.Event.EventShowroom;
 import com.nice295.scratchgames.fragment.BestFragment;
 import com.nice295.scratchgames.fragment.MygamesFragment;
 import com.nice295.scratchgames.fragment.ShowRoomFragment;
 import com.nice295.scratchgames.model.ShowRoomExtItem;
 import com.nice295.scratchgames.model.ShowRoomItem;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,12 +86,28 @@ public class MainActivity extends BaseActivity {
 
     private static final int RC_OCR_CAPTURE = 9003;
 
+    private ArrayList<ShowRoomItem> mMyItemArray;
     private LinkedList<String> mListLikes;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventShowroom(EventShowroom event) {
+        Log.d(TAG, "onShowroomCountEvent: "  + event.count);
+        updateTabTitle(1, getString(R.string.showroom) + "(" + event.count + ")");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMygames(EventMygames event) {
+        Log.d(TAG, "onShowroomCountEvent: "  + event.count);
+        updateTabTitle(2, getString(R.string.mygames) + "(" + event.count + ")");
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mMyItemArray = Paper.book().read("showroom", new ArrayList<ShowRoomItem>());
+        mListLikes = Paper.book().read("likes", new LinkedList<String>());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -156,12 +179,19 @@ public class MainActivity extends BaseActivity {
                 }
         );
 
-        mListLikes = Paper.book().read("likes", new LinkedList<String>());
+
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
     }
 
     @Override
@@ -203,8 +233,8 @@ public class MainActivity extends BaseActivity {
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new BestFragment(), getString(R.string.best));
-        adapter.addFragment(new ShowRoomFragment(), getString(R.string.showroom));
-        adapter.addFragment(new MygamesFragment(), getString(R.string.mygames));
+        adapter.addFragment(new ShowRoomFragment(), getString(R.string.showroom)+ "(" + mMyItemArray.size() + ")");
+        adapter.addFragment(new MygamesFragment(), getString(R.string.mygames) + "(" + mListLikes.size() + ")");
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(0);
     }

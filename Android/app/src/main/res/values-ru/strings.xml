@@ -41,4 +41,5 @@
     <string name="nofavorites" >Нажмите кнопку сердца в играх. Они будут размещены здесь.</string>
     <string name="tooltip1">1. Нажмите кнопку + ниже, чтобы добавить игру.</string>
     <string name="tooltip2">2. Нажмите, чтобы удалить добавленные вами игры.</string>
+    <string name="rate_this_app">" Оценить заявку"</string>
 </resources>

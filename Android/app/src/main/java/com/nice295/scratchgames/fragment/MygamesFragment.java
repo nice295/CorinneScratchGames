@@ -52,10 +52,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.nice295.scratchgames.Event.EventMygames;
+import com.nice295.scratchgames.Event.EventShowroom;
 import com.nice295.scratchgames.R;
 import com.nice295.scratchgames.ShowWebView;
 import com.nice295.scratchgames.model.ShowRoomExtItem;
 import com.nice295.scratchgames.model.ShowRoomItem;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,6 +103,8 @@ public class MygamesFragment extends Fragment {
         mAdapter = new ListViewAdapter(getActivity(), R.layout.layout_item_list_item, mMyItemArray);
         mLvMyItems.setAdapter(mAdapter);
 
+        EventBus.getDefault().post( new EventMygames(mListLikes.size()));
+
         /* 170620
         final View header = getActivity().getLayoutInflater().inflate(R.layout.layout_showroom_header, null, false);
         mLvMyItems.addHeaderView(header);
@@ -126,6 +132,7 @@ public class MygamesFragment extends Fragment {
                             }
 
                             mAdapter.notifyDataSetChanged();
+                            EventBus.getDefault().post( new EventMygames(mAdapter.getCount()));
 
                             Paper.book().write("_showroom-ext", mMyItemExtHash);
                         }
@@ -156,6 +163,7 @@ public class MygamesFragment extends Fragment {
                             }
 
                             mAdapter.notifyDataSetChanged();
+                            EventBus.getDefault().post( new EventMygames(mAdapter.getCount()));
 
                             Paper.book().write("_showroom", mMyItemArray);
                         }
@@ -302,7 +310,7 @@ public class MygamesFragment extends Fragment {
 
         mListLikes = Paper.book().read("likes", new LinkedList<String>());
 
-        if (isVisibleToUser) {
+        if (mAdapter != null && isVisibleToUser) {
             Log.d(TAG, "onResume: Like count: " + mListLikes.size());
 
             mAdapter.clear();
@@ -317,6 +325,7 @@ public class MygamesFragment extends Fragment {
             }
 
             mAdapter.notifyDataSetChanged();
+            EventBus.getDefault().post( new EventMygames(mAdapter.getCount()));
         }
         else {
         }

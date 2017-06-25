@@ -91,7 +91,6 @@ public class ShowWebView extends BaseActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -110,6 +109,11 @@ public class ShowWebView extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.like) {
@@ -240,8 +244,6 @@ public class ShowWebView extends BaseActivity {
         }
 
         closeWebView();
-
-
 
         finish();
     }

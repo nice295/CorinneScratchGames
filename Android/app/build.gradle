@@ -7,8 +7,8 @@ android {
         applicationId 'com.nice295.scratchgames'
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 7
-        versionName '170622'
+        versionCode 8
+        versionName '170624'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -47,6 +47,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'de.cketti.mailto:email-intent-builder:1.0.0'
     compile 'com.google.firebase:firebase-auth:10.0.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
     testCompile 'junit:junit:4.12'
 }
 

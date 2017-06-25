@@ -41,4 +41,5 @@
     <string name="nofavorites" >Tap the heart button in the games. They will be placed here.</string>
     <string name="tooltip1">1. Tap + button below to add your game.</string>
     <string name="tooltip2">2. Long tap to delete the games you added.</string>
+    <string name="rate_this_app">Rate the App</string>
 </resources>

@@ -16,6 +16,7 @@
 
 package com.nice295.scratchgames;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -33,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -61,6 +63,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     private TextView mTvVersion;
     private TextView mTvVersionGuide;
     private Button mBtnUpgrade;
+    private Button mBtnRate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
         mTvVersion = (TextView)findViewById(R.id.tvVersion);
         mTvVersionGuide = (TextView)findViewById(R.id.tvVersionGuide);
         mBtnUpgrade = (Button)findViewById(R.id.btnUpgrade);
+        mBtnRate = (Button)findViewById(R.id.btnRate);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,6 +92,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
             mTvVersionGuide.setText(getString(R.string.Tap_upgrade));
             mBtnUpgrade.setOnClickListener(this);
         }
+        mBtnRate.setOnClickListener(this);
 
         Paper.init(this);
     }
@@ -99,6 +104,17 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
 
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onClick(View view) {
         if (view == mBtnUpgrade) {
             final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
@@ -107,6 +123,19 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
             } catch (android.content.ActivityNotFoundException anfe) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
             }
+        }
+        else if (view == mBtnRate) {
+            launchMarket();
+        }
+    }
+
+    private void launchMarket() {
+        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            startActivity(myAppLinkToMarket);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, " unable to find market app", Toast.LENGTH_LONG).show();
         }
     }
 }
