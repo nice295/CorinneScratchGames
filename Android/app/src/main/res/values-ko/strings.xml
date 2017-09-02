@@ -42,4 +42,5 @@
     <string name="tooltip1">1. + 버턴을 눌러서 당신이 만든 게임을 추가하세요</string>
     <string name="tooltip2">2. 길게 누르면 당신이 추가한 게임을 삭제할 수 있습니다</string>
     <string name="rate_this_app">앱 평가하기</string>
+    <string name="ad_unit_id">ca-app-pub-9553464645775660/4453162832</string>
 </resources>

@@ -45,6 +45,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -109,6 +111,12 @@ public class MygamesFragment extends Fragment {
         final View header = getActivity().getLayoutInflater().inflate(R.layout.layout_showroom_header, null, false);
         mLvMyItems.addHeaderView(header);
         */
+
+        final View footer = getActivity().getLayoutInflater().inflate(R.layout.layout_item_list_item_ad, null, false);
+        mLvMyItems.addFooterView(footer);
+        NativeExpressAdView adView = (NativeExpressAdView) footer.findViewById(R.id.adView);
+        AdRequest request = new AdRequest.Builder().build();
+        adView.loadAd(request);
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());

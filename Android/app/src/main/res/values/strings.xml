@@ -42,4 +42,8 @@
     <string name="tooltip1">1. Tap + button below to add your game.</string>
     <string name="tooltip2">2. Long tap to delete the games you added.</string>
     <string name="rate_this_app">Rate the App</string>
+    <string name="ad_unit_id">ca-app-pub-9553464645775660/4453162832</string>
+
+
+
 </resources>
