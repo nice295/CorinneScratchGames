@@ -112,7 +112,7 @@ public class ShowRoomFragment extends Fragment {
         */
 
         final View header = getActivity().getLayoutInflater().inflate(R.layout.layout_item_list_item_ad, null, false);
-        mLvMyItems.addHeaderView(header);
+        mLvMyItems.addHeaderView(header, null, false);
         NativeExpressAdView adView = (NativeExpressAdView) header.findViewById(R.id.adView);
         AdRequest request = new AdRequest.Builder().build();
         adView.loadAd(request);
@@ -207,6 +207,7 @@ public class ShowRoomFragment extends Fragment {
 
                 }*/
 
+                i -= mLvMyItems.getHeaderViewsCount(); // because of header
                 ShowRoomItem item = mAdapter.getItem().get(i);
 
                 intent.putExtra("id", item.getId());

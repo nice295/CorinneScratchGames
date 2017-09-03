@@ -113,7 +113,7 @@ public class MygamesFragment extends Fragment {
         */
 
         final View footer = getActivity().getLayoutInflater().inflate(R.layout.layout_item_list_item_ad, null, false);
-        mLvMyItems.addFooterView(footer);
+        mLvMyItems.addFooterView(footer, null, false);
         NativeExpressAdView adView = (NativeExpressAdView) footer.findViewById(R.id.adView);
         AdRequest request = new AdRequest.Builder().build();
         adView.loadAd(request);
